@@ -1,0 +1,55 @@
+ReadSfMvf <- function(fname,
+                      info.fields = c(
+                        "szNameFirst",
+                        "szNameMiddle",
+                        "szNameLast",
+                        "szEmailAddress",
+                        "sBirthPlace"),
+                      date.fields = c(
+                        "dtBirthDate",
+                        "dtRegDate",
+                        "dtOrigRegDate",
+                        "dtLastUpdate_dt",
+                        "dtElectionDate1",
+                        "dtElectionDate2",
+                        "dtElectionDate3",
+                        "dtElectionDate4",
+                        "dtElectionDate5")
+                      ) {
+  # Args:  
+  #   fname: A string giving the name of the file to read from disk.  The
+  #     expected file extension is .csv.gz
+  #   info.fields: Names of variable present in the file.  Entries from these
+  #     fields are concatenated into an redneck "user-id" field.
+  #   date.fields: Names of date fields present in the file.  Variables with
+  #     these column names are coerced into Date format.
+  #
+  # Returns:
+  #   A dataframe containing the data from the file.  If 'info.fields' is
+  #   non-empty then a 'unique.id' field is appended.  If 'date.fields' is
+  #   non-empty then columns with those field names are coerced into Date
+  #   format.
+  
+  # Read the San Francisco master voter file from disk.  Replace DateTime fields
+  # (which are read as strings) with DateTime variables.
+  
+  mvf <- read.csv(fname, head=TRUE)
+  if (length(date.fields) > 0) {
+    # Accepted date formats include "2025-09-03" and "3/9/2025".
+    date.formats <- c(
+      "%Y-%m-%d",
+      "%m/%d/%Y"
+    )
+    for (dt in date.fields) {
+      print(paste("converting", dt))
+      mvf[, dt] <- as.Date(mvf[, dt], tryFormats=date.formats)
+    }
+  }
+
+  if (length(info.fields) > 0) {
+    id <- BuildUniqueIds(mvf, info.fields)
+    mvf$unique.id <- id
+  }
+  
+  return(mvf)
+}

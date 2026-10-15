@@ -1,0 +1,20 @@
+Package: Briones
+Type: Package
+Title: Choropleth Maps of San Francisco Supervisor Districts
+Version: 0.1.0
+Authors@R: person("Steve", role = c("aut", "cre"),
+                  email = "steve.the.bayesian@gmail.com")
+Author: Steve [aut, cre]
+Maintainer: Steve <steve.the.bayesian@gmail.com>
+Description: Draws the eleven San Francisco Board of Supervisors districts as a
+    choropleth (filled) map, shading each district according to a numeric value
+    supplied in a data frame. Colour gradients are specified the same way as in
+    'image' and 'heatmap': a vector of colours plus optional 'zlim' or 'breaks'.
+    District boundaries are bundled with the package, so no network access,
+    spatial libraries or external dependencies are required. Uses base graphics
+    only.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 3.6.0)
+LazyData: true
+NeedsCompilation: no
